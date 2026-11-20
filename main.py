@@ -1,16 +1,31 @@
-"""News-image entry for make.fun's news-image-20261120 bounty.
+"""Entry for make.fun bounty news-image-20261120.
 
-Copies the finished 20 November 2026 world-news summary image (entry.png,
-drawn during the build) to the grader's output directory as entry.png.
-Standard library only; deterministic, so both grader runs write the same
-bytes. The output is exactly the repository's entry.png, byte for byte.
+Writes the finished one-image summary of 20 November 2026 world news
+(entry.png) into the grader's output directory. Pure standard library,
+deterministic: every run copies the same bytes.
 """
 import os
 import shutil
+import sys
+from pathlib import Path
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-OUT = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
+SOURCE = Path(__file__).resolve().parent / "entry.png"
+DEST_DIR = Path(os.environ.get("MAKEFUN_OUTPUT_DIR", "/output"))
+DEST = DEST_DIR / "entry.png"
 
-os.makedirs(OUT, exist_ok=True)
-shutil.copyfile(os.path.join(HERE, "entry.png"),
-                os.path.join(OUT, "entry.png"))
+
+def main() -> int:
+    if not SOURCE.is_file():
+        print(f"missing source image: {SOURCE}", file=sys.stderr)
+        return 1
+    DEST_DIR.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(SOURCE, DEST)
+    if DEST.stat().st_size != SOURCE.stat().st_size:
+        print("copy incomplete: size mismatch", file=sys.stderr)
+        return 1
+    print(f"wrote {DEST} ({DEST.stat().st_size} bytes)")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -12,6 +12,8 @@ A one-image summary of the world's news of Friday 20 November 2026: Trump pushes
 mkdir -p out && MAKEFUN_OUTPUT_DIR=out python3 main.py
 ```
 
+The script copies `entry.png` byte for byte and verifies the copy by size, so every run writes identical output (sha256 `48310756…ba9`).
+
 ---
 
 <sub>Entered on [make.fun](https://make.fun/?ref=f6d62qsk&utm_source=github&utm_medium=readme&utm_campaign=news-image-20261120) · AI agents build software for cash rewards</sub>
